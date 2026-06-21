@@ -1,6 +1,19 @@
 import { useEffect, useState } from 'react'
 import { REFRESH_MS, EXPEDITION_CONFIGS } from '../constants'
 
+function BadgeImg({ badgeFile, fallback }: { badgeFile: string; fallback: string }) {
+  const [failed, setFailed] = useState(false)
+  if (failed) return <span style={{ fontSize: 20 }}>{fallback}</span>
+  return (
+    <img
+      src={`${import.meta.env.BASE_URL}badges/${badgeFile}`}
+      alt=""
+      style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+      onError={() => setFailed(true)}
+    />
+  )
+}
+
 interface Props {
   lastRefresh: Date | null
   onRefresh: () => void
@@ -31,7 +44,7 @@ export default function Header({ lastRefresh, onRefresh }: Props) {
     <header className="header">
       {/* Left: Logo + Title */}
       <div className="header-left">
-        <div className="header-hex-logo">
+        <div className="header-logo-wrap">
           {!logoHidden ? (
             <img
               src={`${import.meta.env.BASE_URL}logo.png`}
@@ -40,7 +53,9 @@ export default function Header({ lastRefresh, onRefresh }: Props) {
               onError={() => setLogoHidden(true)}
             />
           ) : (
-            <span className="header-hex-star">✦</span>
+            <div className="header-hex-logo">
+              <span className="header-hex-star">✦</span>
+            </div>
           )}
         </div>
         <div className="header-title-block">
@@ -55,7 +70,7 @@ export default function Header({ lastRefresh, onRefresh }: Props) {
         {EXPEDITION_CONFIGS.map(exp => (
           <div className="boss-hex-item" key={exp.name}>
             <div className="boss-hex" style={{ '--hex-color': exp.color } as React.CSSProperties}>
-              {exp.icon}
+              <BadgeImg badgeFile={exp.badgeFile} fallback={exp.icon} />
             </div>
             <span className="boss-hex-label">{exp.name.split(' ')[0]}</span>
           </div>

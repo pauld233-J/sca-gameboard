@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { Guild, Expedition } from '../types'
 import { BOSS_INDICES, FINISH_IDX, EXPEDITION_CONFIGS } from '../constants'
 
@@ -31,10 +32,31 @@ function useZone(idx: number, expeditions: Expedition[]) {
   const exp = expeditions[ei]
   const cfg = EXPEDITION_CONFIGS[ei]
   return {
-    color: exp?.color ?? cfg.color,
-    icon:  exp?.icon  ?? cfg.icon,
-    name:  exp?.name  ?? cfg.name,
+    color:     exp?.color     ?? cfg.color,
+    icon:      exp?.icon      ?? cfg.icon,
+    name:      exp?.name      ?? cfg.name,
+    badgeFile: cfg.badgeFile,
   }
+}
+
+function SvgBadge({ badgeFile, fallback, x, y, r, clipId }: {
+  badgeFile: string; fallback: string
+  x: number; y: number; r: number; clipId: string
+}) {
+  const [failed, setFailed] = useState(false)
+  const base = import.meta.env.BASE_URL
+  if (failed || !badgeFile) {
+    return <text x={x} y={y + 8} textAnchor="middle" fontSize="20">{fallback}</text>
+  }
+  return (
+    <image
+      href={`${base}badges/${badgeFile}`}
+      x={x - r} y={y - r} width={r * 2} height={r * 2}
+      clipPath={`url(#${clipId})`}
+      preserveAspectRatio="xMidYMid meet"
+      onError={() => setFailed(true)}
+    />
+  )
 }
 
 function ExpeditionLegend({ expeditions }: { expeditions: Expedition[] }) {
@@ -136,16 +158,22 @@ export default function GameBoard({ guilds, expeditions }: Props) {
                       fill="#d4af37" letterSpacing="2"
                     >BOSS</text>
                     <circle
-                      cx={pos.x} cy={pos.y} r={26}
+                      cx={pos.x} cy={pos.y} r={28}
                       fill="url(#bossGrad)"
                       stroke={zone.color} strokeWidth="3"
                       filter="url(#bossGlow)"
                     />
-                    <text x={pos.x} y={pos.y + 9} textAnchor="middle" fontSize="20">
-                      {zone.icon}
-                    </text>
+                    <clipPath id={`bossClip${idx}`}>
+                      <circle cx={pos.x} cy={pos.y} r={25} />
+                    </clipPath>
+                    <SvgBadge
+                      badgeFile={zone.badgeFile ?? ''}
+                      fallback={zone.icon}
+                      x={pos.x} y={pos.y} r={25}
+                      clipId={`bossClip${idx}`}
+                    />
                     <text
-                      x={pos.x} y={pos.y + 43}
+                      x={pos.x} y={pos.y + 45}
                       textAnchor="middle" fontSize="8"
                       fontFamily="Orbitron, sans-serif"
                       fill="#ffffff" opacity="0.9"
