@@ -225,37 +225,31 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   padding: 20px 16px 40px;
   transition: opacity 0.3s;
 }
 .app-layout.loading { opacity: 0.5; pointer-events: none; }
 
-@media (min-width: 1100px) {
+@media (min-width: 1000px) {
   .app-layout {
     flex-direction: row;
     align-items: flex-start;
     justify-content: center;
+    gap: 16px;
   }
-  .scoreboard-section { width: 360px; flex-shrink: 0; }
+  /* Expedition sidebar and scoreboard are fixed-width; board gets remaining space */
+  .expedition-sidebar { flex-shrink: 0; }
+  .scoreboard { width: 260px; flex-shrink: 0; }
 }
 
-/* ── Board section layout ──────────────────────────────────── */
+/* ── Board section ─────────────────────────────────────────── */
 .board-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  width: 100%;
-}
-
-.board-with-expeditions {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 14px;
-  width: 100%;
-  justify-content: center;
+  min-width: 0;
 }
 
 /* ── Expedition sidebar ────────────────────────────────────── */
@@ -329,8 +323,7 @@ body {
 .exp-sidebar-progress .progress-track { flex: 1; height: 5px; }
 .exp-sidebar-progress .exp-progress-label { font-size: 8px; color: var(--text-muted); white-space: nowrap; }
 
-@media (max-width: 800px) {
-  .board-with-expeditions { flex-direction: column; align-items: center; }
+@media (max-width: 999px) {
   .expedition-sidebar { width: min(95vw, 680px); flex-direction: row; flex-wrap: wrap; gap: 6px; }
   .expedition-sidebar-heading { width: 100%; }
   .exp-sidebar-card { flex: 1 1 160px; }
@@ -514,9 +507,8 @@ body {
   max-width: min(95vw, 680px);
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 1000px) {
   .scoreboard {
-    max-width: 360px;
     max-height: calc(100vh - 90px);
     overflow-y: auto;
     scrollbar-width: thin;

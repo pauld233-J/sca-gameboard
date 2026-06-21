@@ -13,16 +13,12 @@ export default function App() {
       <Header lastRefresh={lastRefresh} onRefresh={refresh} />
       {error && <div className="error-banner">⚠ Data error: {error}</div>}
       <main className={`app-layout${loading ? ' loading' : ''}`}>
+        <ExpeditionSidebar expeditions={expeditions} />
         <div className="board-section">
           <RanksOfAchievement guilds={guilds} />
-          <div className="board-with-expeditions">
-            <ExpeditionSidebar expeditions={expeditions} />
-            <GameBoard guilds={guilds} expeditions={expeditions} />
-          </div>
+          <GameBoard guilds={guilds} expeditions={expeditions} />
         </div>
-        <div className="scoreboard-section">
-          <Scoreboard guilds={guilds} />
-        </div>
+        <Scoreboard guilds={guilds} />
       </main>
     </div>
   )
