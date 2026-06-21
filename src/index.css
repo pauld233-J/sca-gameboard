@@ -493,7 +493,7 @@ body {
 
 /* ── Progress bars ─────────────────────────────────────────── */
 .progress-track {
-  height: 8px;
+  height: 10px;
   background: rgba(0,0,0,0.5);
   border-radius: 4px;
   overflow: hidden;
@@ -510,7 +510,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  width: 220px;
+  width: 280px;
   flex-shrink: 0;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -525,7 +525,7 @@ body {
 
 .sb-heading {
   font-family: 'Orbitron', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 900;
   color: var(--gold-rich);
   letter-spacing: 2px;
@@ -548,10 +548,10 @@ body {
   border: 2px solid var(--gold-rich);
   border-left-width: 4px;
   border-radius: var(--radius);
-  padding: 12px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .guild-card:hover {
@@ -566,13 +566,13 @@ body {
 }
 
 .guild-emblem {
-  width: 52px;
-  height: 52px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
+  font-size: 34px;
   border: 2px solid;
   flex-shrink: 0;
 }
@@ -583,20 +583,20 @@ body {
 
 .guild-rank {
   font-family: 'Orbitron', sans-serif;
-  font-size: 22px;
+  font-size: 28px;
   font-weight: 900;
   line-height: 1;
 }
 
 .guild-name {
   font-family: 'Orbitron', sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.5px;
 }
 
 .guild-identity {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--teal);
   font-style: italic;
 }
@@ -604,7 +604,7 @@ body {
 .guild-stats {
   display: flex;
   gap: 10px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
 }
 
