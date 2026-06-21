@@ -8,9 +8,9 @@ interface Props {
 }
 
 // ── SVG layout constants ──────────────────────────────────
-const SVG_W = 780
+const SVG_W = 752
 const SVG_H = 725
-const SX = 55   // left margin
+const SX = 40   // left margin
 const SY = 65   // top margin (room for BOSS label above row-0 nodes)
 const DX = 112  // horizontal node spacing
 const DY = 100  // vertical row spacing
