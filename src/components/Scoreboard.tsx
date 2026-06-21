@@ -1,0 +1,101 @@
+import type { Guild, Expedition } from '../types'
+import { MAX_SEASON } from '../constants'
+
+interface Props {
+  guilds: Guild[]
+  expeditions: Expedition[]
+}
+
+function ProgressBar({ value, max, color }: { value: number; max: number; color: string }) {
+  const pct = Math.min(100, Math.round((value / max) * 100))
+  return (
+    <div className="progress-track">
+      <div
+        className="progress-fill"
+        style={{ width: `${pct}%`, background: color }}
+      />
+    </div>
+  )
+}
+
+function GuildCard({ guild, rank }: { guild: Guild; rank: number }) {
+  const pct = Math.min(100, Math.round((guild.seasonTotal / MAX_SEASON) * 100))
+  return (
+    <div className="guild-card" style={{ borderLeft: `3px solid ${guild.color}` }}>
+      <div className="guild-card-header">
+        <span className="guild-rank" style={{ color: guild.color }}>#{rank}</span>
+        <span className="guild-emoji">{guild.emoji}</span>
+        <div className="guild-info">
+          <span className="guild-name" style={{ color: guild.color }}>{guild.name}</span>
+          <span className="guild-identity">{guild.identity}</span>
+        </div>
+      </div>
+      <ProgressBar value={guild.seasonTotal} max={MAX_SEASON} color={guild.color} />
+      <div className="guild-stats">
+        <span>{guild.seasonTotal.toLocaleString()} pts</span>
+        <span>Space #{guild.position + 1}</span>
+        <span>{pct}%</span>
+      </div>
+    </div>
+  )
+}
+
+function ExpeditionCard({ expedition }: { expedition: Expedition }) {
+  return (
+    <div
+      className="expedition-card"
+      style={{ borderLeft: `3px solid ${expedition.color}` }}
+      data-status={expedition.status}
+    >
+      <div className="expedition-card-header">
+        <span className="exp-icon">{expedition.icon}</span>
+        <div className="exp-info">
+          <div className="exp-title-row">
+            <span className="exp-name" style={{ color: expedition.color }}>{expedition.name}</span>
+            <span className="status-pill" data-status={expedition.status}>{expedition.status}</span>
+          </div>
+          <span className="exp-division">{expedition.divisionName}</span>
+          {expedition.bossBattle && (
+            <span className="exp-boss">⚔ {expedition.bossBattle}</span>
+          )}
+        </div>
+      </div>
+      {expedition.classProgress > 0 && (
+        <>
+          <ProgressBar value={expedition.classProgress} max={100} color={expedition.color} />
+          <div className="exp-progress-label">{expedition.classProgress}% class progress</div>
+        </>
+      )}
+    </div>
+  )
+}
+
+export default function Scoreboard({ guilds, expeditions }: Props) {
+  const sortedGuilds = [...guilds].sort((a, b) => b.seasonTotal - a.seasonTotal)
+
+  return (
+    <div className="scoreboard">
+      <section className="sb-section">
+        <h2 className="sb-heading">⚔ Guilds</h2>
+        {sortedGuilds.length === 0 ? (
+          <p className="sb-empty">Loading guild data…</p>
+        ) : (
+          sortedGuilds.map((guild, i) => (
+            <GuildCard key={guild.name} guild={guild} rank={i + 1} />
+          ))
+        )}
+      </section>
+
+      <section className="sb-section">
+        <h2 className="sb-heading">🗺 Expeditions</h2>
+        {expeditions.length === 0 ? (
+          <p className="sb-empty">Loading expedition data…</p>
+        ) : (
+          expeditions.map(exp => (
+            <ExpeditionCard key={exp.order} expedition={exp} />
+          ))
+        )}
+      </section>
+    </div>
+  )
+}
