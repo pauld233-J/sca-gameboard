@@ -8,12 +8,12 @@ export const FINISH_IDX = 42
 export const BOSS_INDICES = new Set([6, 13, 20, 27, 34, 41])
 
 export const EXPEDITION_CONFIGS: ExpeditionConfig[] = [
-  { name: 'Forces',               color: '#0096C7', icon: '⬆',  badgeFile: 'forces.png' },
-  { name: 'Energy',               color: '#F9C74F', icon: '⚡',  badgeFile: 'energy.png' },
-  { name: 'Waves',                color: '#00B4D8', icon: '〰',  badgeFile: 'waves.png' },
-  { name: 'Space',                color: '#9D4EDD', icon: '🪐',  badgeFile: 'space.png' },
-  { name: "Earth's History",      color: '#A0522D', icon: '🪨',  badgeFile: 'earth_s_history.png' },
-  { name: 'Evolution & Genetics', color: '#2DC653', icon: '🧬',  badgeFile: 'evolution___genetics.png' },
+  { name: 'Forces',               color: '#0096C7', icon: '⬆',  badgeFile: 'Forces and Motion Badge.png' },
+  { name: 'Energy',               color: '#F9C74F', icon: '⚡',  badgeFile: 'Energy Badge.png' },
+  { name: 'Waves',                color: '#00B4D8', icon: '〰',  badgeFile: 'Waves Badge.png' },
+  { name: 'Space',                color: '#9D4EDD', icon: '🪐',  badgeFile: 'Space Badge.png' },
+  { name: "Earth's History",      color: '#A0522D', icon: '🪨',  badgeFile: 'Earth History Badge.png' },
+  { name: 'Evolution & Genetics', color: '#2DC653', icon: '🧬',  badgeFile: 'Evoluton Genetics Badge.png' },
 ]
 
 export interface Rank {
