@@ -24,7 +24,7 @@ body {
   background-attachment: fixed;
   color: var(--text);
   font-family: 'Exo 2', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   height: 100%;
   overflow: hidden;
 }
@@ -250,7 +250,7 @@ body {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 8px;
   overflow: hidden;
 }
@@ -260,7 +260,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 185px;
+  width: 170px;
   flex-shrink: 0;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -297,7 +297,7 @@ body {
   align-items: flex-start;
   gap: 7px;
 }
-.exp-sidebar-icon { font-size: 16px; flex-shrink: 0; line-height: 1.2; }
+.exp-sidebar-icon { font-size: 20px; flex-shrink: 0; line-height: 1.2; }
 .exp-sidebar-info {
   display: flex;
   flex-direction: column;
@@ -306,18 +306,18 @@ body {
 }
 .exp-sidebar-name {
   font-family: 'Orbitron', sans-serif;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   line-height: 1.2;
   word-break: break-word;
 }
 .exp-sidebar-division {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--text-muted);
   line-height: 1.2;
 }
 .exp-sidebar-boss {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--teal);
   font-style: italic;
 }
@@ -326,8 +326,8 @@ body {
   align-items: center;
   gap: 6px;
 }
-.exp-sidebar-progress .progress-track { flex: 1; height: 5px; }
-.exp-sidebar-progress .exp-progress-label { font-size: 8px; color: var(--text-muted); white-space: nowrap; }
+.exp-sidebar-progress .progress-track { flex: 1; height: 6px; }
+.exp-sidebar-progress .exp-progress-label { font-size: 10px; color: var(--text-muted); white-space: nowrap; }
 
 @media (max-width: 999px) {
   .expedition-sidebar { width: min(95vw, 680px); flex-direction: row; flex-wrap: wrap; gap: 6px; }
@@ -345,6 +345,8 @@ body {
 
 /* ── SVG Board wrapper ─────────────────────────────────────── */
 .board-svg-wrapper {
+  flex: 1;
+  min-height: 0;
   width: 100%;
   background-color: #06091e;
   background-image:
@@ -377,7 +379,7 @@ body {
     inset 0 0 40px rgba(10,26,62,0.8);
 }
 
-.board-svg { display: block; width: 100%; height: auto; }
+.board-svg { display: block; width: 100%; height: 100%; }
 
 /* ── Ranks of Achievement ──────────────────────────────────── */
 .ranks-container {
@@ -478,9 +480,9 @@ body {
 /* ── Status pills ──────────────────────────────────────────── */
 .status-pill {
   font-family: 'Orbitron', sans-serif;
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 700;
-  padding: 2px 7px;
+  padding: 3px 8px;
   border-radius: 10px;
   letter-spacing: 0.5px;
   white-space: nowrap;
@@ -508,7 +510,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  width: 240px;
+  width: 220px;
   flex-shrink: 0;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -523,7 +525,7 @@ body {
 
 .sb-heading {
   font-family: 'Orbitron', sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 900;
   color: var(--gold-rich);
   letter-spacing: 2px;
@@ -535,7 +537,7 @@ body {
 
 .sb-empty {
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 14px;
   text-align: center;
   padding: 12px;
 }
@@ -564,37 +566,37 @@ body {
 }
 
 .guild-emblem {
-  width: 46px;
-  height: 46px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 28px;
   border: 2px solid;
   flex-shrink: 0;
 }
 
-.guild-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.guild-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 
 .guild-rank-row { display: flex; align-items: center; gap: 6px; }
 
 .guild-rank {
   font-family: 'Orbitron', sans-serif;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 900;
   line-height: 1;
 }
 
 .guild-name {
   font-family: 'Orbitron', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.5px;
 }
 
 .guild-identity {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--teal);
   font-style: italic;
 }
@@ -602,7 +604,7 @@ body {
 .guild-stats {
   display: flex;
   gap: 10px;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-muted);
 }
 
