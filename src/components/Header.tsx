@@ -72,7 +72,7 @@ export default function Header({ lastRefresh, onRefresh }: Props) {
             <div className="boss-hex" style={{ '--hex-color': exp.color } as React.CSSProperties}>
               <BadgeImg badgeFile={exp.badgeFile} fallback={exp.icon} />
             </div>
-            <span className="boss-hex-label">{exp.name.split(' ')[0]}</span>
+            <span className="boss-hex-label">{exp.name.split(' ').at(-1)}</span>
           </div>
         ))}
       </div>
