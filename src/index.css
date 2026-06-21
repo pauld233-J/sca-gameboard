@@ -260,7 +260,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 210px;
+  width: 260px;
   flex-shrink: 0;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -269,7 +269,7 @@ body {
 
 .expedition-sidebar-heading {
   font-family: 'Orbitron', sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 900;
   color: var(--gold-rich);
   letter-spacing: 2px;
@@ -284,10 +284,10 @@ body {
   border: 1px solid rgba(212,175,55,0.2);
   border-left-width: 3px;
   border-radius: var(--radius);
-  padding: 10px 12px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
   transition: opacity 0.2s;
 }
 .exp-sidebar-card[data-status="Locked"] { opacity: 0.5; }
@@ -297,7 +297,7 @@ body {
   align-items: flex-start;
   gap: 7px;
 }
-.exp-sidebar-icon { font-size: 26px; flex-shrink: 0; line-height: 1.2; }
+.exp-sidebar-icon { font-size: 32px; flex-shrink: 0; line-height: 1.2; }
 .exp-sidebar-info {
   display: flex;
   flex-direction: column;
@@ -306,18 +306,18 @@ body {
 }
 .exp-sidebar-name {
   font-family: 'Orbitron', sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   line-height: 1.2;
   word-break: break-word;
 }
 .exp-sidebar-division {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
   line-height: 1.2;
 }
 .exp-sidebar-boss {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--teal);
   font-style: italic;
 }
@@ -326,8 +326,8 @@ body {
   align-items: center;
   gap: 6px;
 }
-.exp-sidebar-progress .progress-track { flex: 1; height: 8px; }
-.exp-sidebar-progress .exp-progress-label { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+.exp-sidebar-progress .progress-track { flex: 1; height: 10px; }
+.exp-sidebar-progress .exp-progress-label { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
 
 @media (max-width: 999px) {
   .expedition-sidebar { width: min(95vw, 680px); flex-direction: row; flex-wrap: wrap; gap: 6px; }
