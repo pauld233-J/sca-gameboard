@@ -227,8 +227,8 @@ body {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  gap: 10px;
-  padding: 10px 10px 10px;
+  gap: 4px;
+  padding: 8px 6px;
   overflow: hidden;
   transition: opacity 0.3s;
 }
@@ -260,7 +260,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 170px;
+  width: 210px;
   flex-shrink: 0;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -269,7 +269,7 @@ body {
 
 .expedition-sidebar-heading {
   font-family: 'Orbitron', sans-serif;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 900;
   color: var(--gold-rich);
   letter-spacing: 2px;
@@ -284,10 +284,10 @@ body {
   border: 1px solid rgba(212,175,55,0.2);
   border-left-width: 3px;
   border-radius: var(--radius);
-  padding: 8px 10px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   transition: opacity 0.2s;
 }
 .exp-sidebar-card[data-status="Locked"] { opacity: 0.5; }
@@ -297,7 +297,7 @@ body {
   align-items: flex-start;
   gap: 7px;
 }
-.exp-sidebar-icon { font-size: 20px; flex-shrink: 0; line-height: 1.2; }
+.exp-sidebar-icon { font-size: 26px; flex-shrink: 0; line-height: 1.2; }
 .exp-sidebar-info {
   display: flex;
   flex-direction: column;
@@ -306,18 +306,18 @@ body {
 }
 .exp-sidebar-name {
   font-family: 'Orbitron', sans-serif;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1.2;
   word-break: break-word;
 }
 .exp-sidebar-division {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-muted);
   line-height: 1.2;
 }
 .exp-sidebar-boss {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--teal);
   font-style: italic;
 }
@@ -326,8 +326,8 @@ body {
   align-items: center;
   gap: 6px;
 }
-.exp-sidebar-progress .progress-track { flex: 1; height: 6px; }
-.exp-sidebar-progress .exp-progress-label { font-size: 10px; color: var(--text-muted); white-space: nowrap; }
+.exp-sidebar-progress .progress-track { flex: 1; height: 8px; }
+.exp-sidebar-progress .exp-progress-label { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
 
 @media (max-width: 999px) {
   .expedition-sidebar { width: min(95vw, 680px); flex-direction: row; flex-wrap: wrap; gap: 6px; }
@@ -513,7 +513,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  width: 210px;
+  width: 250px;
   flex-shrink: 0;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -528,7 +528,7 @@ body {
 
 .sb-heading {
   font-family: 'Orbitron', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 900;
   color: var(--gold-rich);
   letter-spacing: 2px;
@@ -569,13 +569,13 @@ body {
 }
 
 .guild-emblem {
-  width: 44px;
-  height: 44px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 30px;
   border: 2px solid;
   flex-shrink: 0;
 }
@@ -586,20 +586,20 @@ body {
 
 .guild-rank {
   font-family: 'Orbitron', sans-serif;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 900;
   line-height: 1;
 }
 
 .guild-name {
   font-family: 'Orbitron', sans-serif;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.5px;
 }
 
 .guild-identity {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--teal);
   font-style: italic;
 }
@@ -607,7 +607,7 @@ body {
 .guild-stats {
   display: flex;
   gap: 6px;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-muted);
   flex-wrap: wrap;
 }
