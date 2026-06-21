@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { REFRESH_MS } from '../constants'
+import { REFRESH_MS, EXPEDITION_CONFIGS } from '../constants'
 
 interface Props {
   lastRefresh: Date | null
@@ -8,13 +8,9 @@ interface Props {
 
 function useCountdown(lastRefresh: Date | null) {
   const [display, setDisplay] = useState('5:00')
-
   useEffect(() => {
     function tick() {
-      if (!lastRefresh) {
-        setDisplay('--:--')
-        return
-      }
+      if (!lastRefresh) { setDisplay('--:--'); return }
       const remaining = Math.max(0, lastRefresh.getTime() + REFRESH_MS - Date.now())
       const m = Math.floor(remaining / 60000)
       const s = Math.floor((remaining % 60000) / 1000)
@@ -24,33 +20,55 @@ function useCountdown(lastRefresh: Date | null) {
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
   }, [lastRefresh])
-
   return display
 }
 
 export default function Header({ lastRefresh, onRefresh }: Props) {
   const countdown = useCountdown(lastRefresh)
+  const [logoHidden, setLogoHidden] = useState(false)
 
   return (
     <header className="header">
+      {/* Left: Logo + Title */}
       <div className="header-left">
-        <img
-          src={`${import.meta.env.BASE_URL}logo.png`}
-          alt="SCA Logo"
-          className="header-logo"
-          onError={(e) => {
-            e.currentTarget.style.display = 'none'
-          }}
-        />
-        <h1 className="header-title">Scientific Expedition Gameboard</h1>
+        <div className="header-hex-logo">
+          {!logoHidden ? (
+            <img
+              src={`${import.meta.env.BASE_URL}logo.png`}
+              alt="SCA"
+              className="header-logo-img"
+              onError={() => setLogoHidden(true)}
+            />
+          ) : (
+            <span className="header-hex-star">✦</span>
+          )}
+        </div>
+        <div className="header-title-block">
+          <span className="header-sca">SCA</span>
+          <span className="header-subtitle">SCIENTIFIC EXPEDITION</span>
+          <span className="header-tagline">— MASTERING CREATION THROUGH SCIENCE —</span>
+        </div>
       </div>
+
+      {/* Center: Boss hexagons */}
+      <div className="header-boss-hexes">
+        {EXPEDITION_CONFIGS.map(exp => (
+          <div className="boss-hex-item" key={exp.name}>
+            <div className="boss-hex" style={{ '--hex-color': exp.color } as React.CSSProperties}>
+              {exp.icon}
+            </div>
+            <span className="boss-hex-label">{exp.name.split(' ')[0]}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Right: Countdown + Refresh */}
       <div className="header-right">
         <span className="header-countdown">
-          Next refresh: <strong>{countdown}</strong>
+          <span className="countdown-label">Next refresh</span>
+          <strong className="countdown-time">{countdown}</strong>
         </span>
-        <button className="refresh-btn" onClick={onRefresh}>
-          ↻ Refresh
-        </button>
+        <button className="refresh-btn" onClick={onRefresh}>↻ Refresh</button>
       </div>
     </header>
   )
