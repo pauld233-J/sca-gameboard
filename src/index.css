@@ -227,6 +227,7 @@ body {
   display: flex;
   flex-direction: row;
   align-items: stretch;
+  justify-content: center;
   gap: 4px;
   padding: 8px 6px;
   overflow: hidden;
@@ -245,8 +246,8 @@ body {
 
 /* ── Board section ─────────────────────────────────────────── */
 .board-section {
-  flex: 1;
-  min-width: 0;
+  flex: 0 0 auto;
+  align-self: stretch;
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -347,10 +348,9 @@ body {
 
 /* ── SVG Board wrapper ─────────────────────────────────────── */
 .board-svg-wrapper {
-  flex: 1;
-  min-height: 0;
+  flex: none;
+  height: 100%;
   aspect-ratio: 752 / 725;
-  max-width: 100%;
   background-color: #06091e;
   background-image:
     radial-gradient(1.5px 1.5px at  8%  9%, rgba(255,255,255,0.75), transparent),
