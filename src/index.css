@@ -337,6 +337,8 @@ body {
 
 /* ── Board container ───────────────────────────────────────── */
 .board-container {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -510,7 +512,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  width: 280px;
+  width: 210px;
   flex-shrink: 0;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -548,10 +550,10 @@ body {
   border: 2px solid var(--gold-rich);
   border-left-width: 4px;
   border-radius: var(--radius);
-  padding: 14px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .guild-card:hover {
@@ -566,13 +568,13 @@ body {
 }
 
 .guild-emblem {
-  width: 64px;
-  height: 64px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 34px;
+  font-size: 24px;
   border: 2px solid;
   flex-shrink: 0;
 }
@@ -583,29 +585,30 @@ body {
 
 .guild-rank {
   font-family: 'Orbitron', sans-serif;
-  font-size: 28px;
+  font-size: 18px;
   font-weight: 900;
   line-height: 1;
 }
 
 .guild-name {
   font-family: 'Orbitron', sans-serif;
-  font-size: 15px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.5px;
 }
 
 .guild-identity {
-  font-size: 14px;
+  font-size: 11px;
   color: var(--teal);
   font-style: italic;
 }
 
 .guild-stats {
   display: flex;
-  gap: 10px;
-  font-size: 13px;
+  gap: 6px;
+  font-size: 11px;
   color: var(--text-muted);
+  flex-wrap: wrap;
 }
 
 /* ── Expedition cards ──────────────────────────────────────── */
