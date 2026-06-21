@@ -16,6 +16,31 @@ export const EXPEDITION_CONFIGS: ExpeditionConfig[] = [
   { name: 'Evolution & Genetics', color: '#2DC653', icon: '🧬',  badgeFile: 'evolution___genetics.png' },
 ]
 
+export interface Rank {
+  level: number
+  name: string
+  threshold: number
+}
+
+export const RANKS: Rank[] = [
+  { level: 1, name: 'Novice',       threshold: 0 },
+  { level: 2, name: 'Apprentice',   threshold: 180 },
+  { level: 3, name: 'Scholar',      threshold: 360 },
+  { level: 4, name: 'Researcher',   threshold: 540 },
+  { level: 5, name: 'Expert',       threshold: 756 },
+  { level: 6, name: 'Master',       threshold: 1008 },
+  { level: 7, name: 'Grand Sage',   threshold: 1260 },
+]
+
+export function getGuildRank(seasonTotal: number): Rank {
+  let current = RANKS[0]
+  for (const r of RANKS) {
+    if (seasonTotal >= r.threshold) current = r
+    else break
+  }
+  return current
+}
+
 export const GUILD_CONFIGS: GuildConfig[] = [
   { name: 'Helix',   color: '#00B4D8', colorAlpha: 'rgba(0,180,216,0.6)',   emoji: '🧬', initials: 'HX' },
   { name: 'Nova',    color: '#9D4EDD', colorAlpha: 'rgba(157,78,221,0.6)',  emoji: '⭐', initials: 'NV' },

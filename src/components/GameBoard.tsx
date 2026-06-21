@@ -1,126 +1,54 @@
 import type { Guild, Expedition } from '../types'
 import { BOSS_INDICES, FINISH_IDX, EXPEDITION_CONFIGS } from '../constants'
-import { gridToIndex, expeditionIndexForSpace } from '../utils/board'
-import GuildPiece from './GuildPiece'
 
 interface Props {
   guilds: Guild[]
   expeditions: Expedition[]
 }
 
-const STAGGER: [number, number][] = [[-9, -9], [9, -9], [-9, 9], [9, 9]]
+// ── SVG layout constants ──────────────────────────────────
+const SVG_W = 780
+const SVG_H = 725
+const SX = 55   // left margin
+const SY = 65   // top margin (room for BOSS label above row-0 nodes)
+const DX = 112  // horizontal node spacing
+const DY = 100  // vertical row spacing
 
-function getStagger(idx: number, total: number): [number, number] {
-  if (total <= 1) return [0, 0]
-  return STAGGER[idx % 4]
+function nodePos(index: number): { x: number; y: number } {
+  const row = Math.floor(index / 7)
+  const col = row % 2 === 0 ? index % 7 : 6 - (index % 7)
+  return { x: SX + col * DX, y: SY + row * DY }
 }
 
-interface SpaceCellProps {
-  spaceIdx: number
-  guildsHere: Guild[]
-  expeditions: Expedition[]
+// 4-quadrant stagger for shared spaces
+const STAGGER: [number, number][] = [[-22, -22], [22, -22], [-22, 22], [22, 22]]
+function guildOffset(i: number, total: number): [number, number] {
+  return total <= 1 ? [0, 0] : STAGGER[i % 4]
 }
 
-function SpaceCell({ spaceIdx, guildsHere, expeditions }: SpaceCellProps) {
-  const isStart = spaceIdx === 0
-  const isFinish = spaceIdx === FINISH_IDX
-  const isBoss = BOSS_INDICES.has(spaceIdx)
-  const expIdx = isFinish ? -1 : expeditionIndexForSpace(spaceIdx)
-  const expConfig = expIdx >= 0 ? (expeditions[expIdx] ?? EXPEDITION_CONFIGS[expIdx]) : null
-  const zoneColor = expConfig?.color ?? '#F9C74F'
-
-  let bgColor = 'var(--navy-light)'
-  let borderStyle: React.CSSProperties = {}
-  let shadow = ''
-
-  if (isStart) {
-    bgColor = 'rgba(45,198,83,0.18)'
-    borderStyle = { border: '2px solid #2DC653' }
-  } else if (isFinish) {
-    bgColor = 'rgba(249,199,79,0.18)'
-    borderStyle = { border: '2px solid var(--gold)' }
-  } else if (isBoss) {
-    bgColor = `${zoneColor}18`
-    borderStyle = { border: `2px solid ${zoneColor}` }
-    shadow = `0 0 14px ${zoneColor}88, inset 0 0 8px ${zoneColor}22`
-  } else {
-    borderStyle = { borderLeft: `3px solid ${zoneColor}` }
+function useZone(idx: number, expeditions: Expedition[]) {
+  const ei = Math.min(Math.floor(idx / 7), 5)
+  const exp = expeditions[ei]
+  const cfg = EXPEDITION_CONFIGS[ei]
+  return {
+    color: exp?.color ?? cfg.color,
+    icon:  exp?.icon  ?? cfg.icon,
+    name:  exp?.name  ?? cfg.name,
   }
-
-  return (
-    <div
-      className={`space-cell${isBoss ? ' boss-space' : ''}${isStart ? ' start-space' : ''}${isFinish ? ' finish-space' : ''}`}
-      style={{
-        background: bgColor,
-        boxShadow: shadow || undefined,
-        position: 'relative',
-        overflow: 'visible',
-        ...borderStyle,
-      }}
-    >
-      {isStart && (
-        <div className="space-label start-label">
-          <span>START</span>
-          <span style={{ fontSize: 14 }}>▶</span>
-        </div>
-      )}
-
-      {isFinish && (
-        <div className="space-label finish-label">
-          <span style={{ fontSize: 14 }}>🏆</span>
-          <span>FINISH</span>
-        </div>
-      )}
-
-      {isBoss && expConfig && (
-        <div className="boss-content">
-          <img
-            src={`${import.meta.env.BASE_URL}badges/${expConfig.badgeFile}`}
-            alt=""
-            className="boss-badge-img"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none'
-            }}
-          />
-          <span className="boss-icon">{expConfig.icon}</span>
-          <span className="boss-text">BOSS</span>
-          <span className="boss-name" style={{ color: zoneColor }}>{expConfig.name}</span>
-        </div>
-      )}
-
-      {!isStart && !isFinish && !isBoss && (
-        <div className="normal-space-content">
-          <span className="space-dot" style={{ background: zoneColor }} />
-          <span className="space-num">{spaceIdx}</span>
-        </div>
-      )}
-
-      {guildsHere.map((guild, i) => {
-        const [ox, oy] = getStagger(i, guildsHere.length)
-        return <GuildPiece key={guild.name} guild={guild} offsetX={ox} offsetY={oy} />
-      })}
-    </div>
-  )
 }
 
 function ExpeditionLegend({ expeditions }: { expeditions: Expedition[] }) {
-  const items = EXPEDITION_CONFIGS.map((cfg, i) => {
-    const data = expeditions.find(e => e.order === i + 1)
-    return { ...cfg, status: data?.status ?? 'Locked' as const }
-  })
-
+  const items = EXPEDITION_CONFIGS.map((cfg, i) => ({
+    ...cfg,
+    status: expeditions.find(e => e.order === i + 1)?.status ?? ('Locked' as const),
+  }))
   return (
     <div className="expedition-legend">
       {items.map(exp => (
         <div key={exp.name} className="legend-item">
           <span className="legend-icon">{exp.icon}</span>
           <span className="legend-name">{exp.name}</span>
-          <span
-            className="status-pill"
-            data-status={exp.status}
-          >
-            {exp.status}
-          </span>
+          <span className="status-pill" data-status={exp.status}>{exp.status}</span>
         </div>
       ))}
     </div>
@@ -128,42 +56,186 @@ function ExpeditionLegend({ expeditions }: { expeditions: Expedition[] }) {
 }
 
 export default function GameBoard({ guilds, expeditions }: Props) {
-  // Build map: position → guilds
-  const byPosition = new Map<number, Guild[]>()
-  for (const guild of guilds) {
-    const list = byPosition.get(guild.position) ?? []
-    list.push(guild)
-    byPosition.set(guild.position, list)
+  // Build position → guilds map
+  const byPos = new Map<number, Guild[]>()
+  for (const g of guilds) {
+    const list = byPos.get(g.position) ?? []
+    list.push(g)
+    byPos.set(g.position, list)
   }
-
-  // Build 7×7 grid of space indices
-  const cells: (number | null)[][] = Array.from({ length: 7 }, (_, row) =>
-    Array.from({ length: 7 }, (_, col) => gridToIndex(row, col)),
-  )
 
   return (
     <div className="board-container">
-      <div className="board-grid">
-        {cells.flatMap((row, rowIdx) =>
-          row.map((spaceIdx, colIdx) => (
-            <div
-              key={`${rowIdx}-${colIdx}`}
-              className="board-cell"
-              style={{ gridRow: rowIdx + 1, gridColumn: colIdx + 1 }}
-            >
-              {spaceIdx !== null ? (
-                <SpaceCell
-                  spaceIdx={spaceIdx}
-                  guildsHere={byPosition.get(spaceIdx) ?? []}
-                  expeditions={expeditions}
-                />
-              ) : (
-                <div className="empty-cell" />
-              )}
-            </div>
-          )),
-        )}
+      <div className="board-svg-wrapper">
+        <svg
+          viewBox={`0 0 ${SVG_W} ${SVG_H}`}
+          width="100%"
+          height="auto"
+          className="board-svg"
+          aria-label="SCA Scientific Expedition gameboard"
+        >
+          <defs>
+            {/* Boss node fill */}
+            <radialGradient id="bossGrad" cx="35%" cy="35%">
+              <stop offset="0%" stopColor="#ff7043" />
+              <stop offset="100%" stopColor="#7b1200" />
+            </radialGradient>
+            {/* Boss glow filter */}
+            <filter id="bossGlow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+            {/* Token glow filter */}
+            <filter id="tokenGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          {/* ── Dashed path between consecutive nodes ── */}
+          {Array.from({ length: 42 }, (_, i) => {
+            const a = nodePos(i)
+            const b = nodePos(i + 1)
+            return (
+              <line
+                key={i}
+                x1={a.x} y1={a.y}
+                x2={b.x} y2={b.y}
+                stroke="#4dd0e1"
+                strokeWidth="4"
+                strokeDasharray="9 7"
+                opacity="0.55"
+              />
+            )
+          })}
+
+          {/* ── Nodes ── */}
+          {Array.from({ length: 43 }, (_, idx) => {
+            const pos = nodePos(idx)
+            const isBoss   = BOSS_INDICES.has(idx)
+            const isStart  = idx === 0
+            const isFinish = idx === FINISH_IDX
+            const zone     = useZone(idx, expeditions)
+            const here     = byPos.get(idx) ?? []
+
+            return (
+              <g key={idx}>
+                {/* ── BOSS node ── */}
+                {isBoss && (
+                  <>
+                    <text
+                      x={pos.x} y={pos.y - 34}
+                      textAnchor="middle" fontSize="8"
+                      fontFamily="Orbitron, sans-serif" fontWeight="900"
+                      fill="#d4af37" letterSpacing="2"
+                    >BOSS</text>
+                    <circle
+                      cx={pos.x} cy={pos.y} r={26}
+                      fill="url(#bossGrad)"
+                      stroke={zone.color} strokeWidth="3"
+                      filter="url(#bossGlow)"
+                    />
+                    <text x={pos.x} y={pos.y + 9} textAnchor="middle" fontSize="20">
+                      {zone.icon}
+                    </text>
+                    <text
+                      x={pos.x} y={pos.y + 43}
+                      textAnchor="middle" fontSize="8"
+                      fontFamily="Orbitron, sans-serif"
+                      fill="#ffffff" opacity="0.9"
+                    >{zone.name}</text>
+                  </>
+                )}
+
+                {/* ── START node ── */}
+                {isStart && (
+                  <>
+                    <text
+                      x={pos.x} y={pos.y - 28}
+                      textAnchor="middle" fontSize="8"
+                      fontFamily="Orbitron, sans-serif" fontWeight="900"
+                      fill="#2DC653" letterSpacing="1"
+                    >START</text>
+                    <circle
+                      cx={pos.x} cy={pos.y} r={22}
+                      fill="rgba(20,70,20,0.9)"
+                      stroke="#2DC653" strokeWidth="3"
+                    />
+                    <text x={pos.x} y={pos.y + 8} textAnchor="middle" fontSize="18">▶</text>
+                  </>
+                )}
+
+                {/* ── FINISH node ── */}
+                {isFinish && (
+                  <>
+                    <text
+                      x={pos.x} y={pos.y - 29}
+                      textAnchor="middle" fontSize="8"
+                      fontFamily="Orbitron, sans-serif" fontWeight="900"
+                      fill="#d4af37" letterSpacing="1"
+                    >FINISH</text>
+                    <circle
+                      cx={pos.x} cy={pos.y} r={22}
+                      fill="rgba(140,110,0,0.25)"
+                      stroke="#d4af37" strokeWidth="3"
+                    />
+                    <text x={pos.x} y={pos.y + 9} textAnchor="middle" fontSize="20">🏆</text>
+                  </>
+                )}
+
+                {/* ── Normal node ── */}
+                {!isBoss && !isStart && !isFinish && (
+                  <>
+                    <circle
+                      cx={pos.x} cy={pos.y} r={18}
+                      fill="rgba(18,36,90,0.88)"
+                      stroke={zone.color} strokeWidth="2"
+                    />
+                    <text
+                      x={pos.x} y={pos.y + 5}
+                      textAnchor="middle" fontSize="11"
+                      fontFamily="Orbitron, sans-serif" fontWeight="bold"
+                      fill="#ffffff"
+                    >{idx}</text>
+                  </>
+                )}
+
+                {/* ── Guild tokens ── */}
+                {here.map((guild, gi) => {
+                  const [ox, oy] = guildOffset(gi, here.length)
+                  const tx = pos.x + ox
+                  const ty = pos.y + oy
+                  return (
+                    <g key={guild.name} filter="url(#tokenGlow)">
+                      <circle
+                        cx={tx} cy={ty} r={16}
+                        fill={guild.color}
+                        stroke="rgba(255,255,255,0.35)" strokeWidth="1.5"
+                      />
+                      <text x={tx} y={ty - 2} textAnchor="middle" fontSize="13">
+                        {guild.emoji}
+                      </text>
+                      <text
+                        x={tx} y={ty + 9}
+                        textAnchor="middle" fontSize="6"
+                        fontFamily="Orbitron, sans-serif" fontWeight="700"
+                        fill="#fff" letterSpacing="0.5"
+                      >{guild.initials}</text>
+                    </g>
+                  )
+                })}
+              </g>
+            )
+          })}
+        </svg>
       </div>
+
       <ExpeditionLegend expeditions={expeditions} />
     </div>
   )
