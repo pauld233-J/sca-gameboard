@@ -59,23 +59,6 @@ function SvgBadge({ badgeFile, fallback, x, y, r, clipId }: {
   )
 }
 
-function ExpeditionLegend({ expeditions }: { expeditions: Expedition[] }) {
-  const items = EXPEDITION_CONFIGS.map((cfg, i) => ({
-    ...cfg,
-    status: expeditions.find(e => e.order === i + 1)?.status ?? ('Locked' as const),
-  }))
-  return (
-    <div className="expedition-legend">
-      {items.map(exp => (
-        <div key={exp.name} className="legend-item">
-          <span className="legend-icon">{exp.icon}</span>
-          <span className="legend-name">{exp.name}</span>
-          <span className="status-pill" data-status={exp.status}>{exp.status}</span>
-        </div>
-      ))}
-    </div>
-  )
-}
 
 export default function GameBoard({ guilds, expeditions }: Props) {
   // Build position → guilds map
@@ -264,7 +247,6 @@ export default function GameBoard({ guilds, expeditions }: Props) {
         </svg>
       </div>
 
-      <ExpeditionLegend expeditions={expeditions} />
     </div>
   )
 }

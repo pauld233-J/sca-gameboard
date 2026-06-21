@@ -1,9 +1,8 @@
-import type { Guild, Expedition } from '../types'
+import type { Guild } from '../types'
 import { MAX_SEASON } from '../constants'
 
 interface Props {
   guilds: Guild[]
-  expeditions: Expedition[]
 }
 
 function ProgressBar({
@@ -57,37 +56,8 @@ function GuildCard({ guild, rank }: { guild: Guild; rank: number }) {
   )
 }
 
-function ExpeditionCard({ expedition }: { expedition: Expedition }) {
-  return (
-    <div
-      className="expedition-card"
-      style={{ borderLeftColor: expedition.color }}
-      data-status={expedition.status}
-    >
-      <div className="expedition-card-header">
-        <span className="exp-icon">{expedition.icon}</span>
-        <div className="exp-info">
-          <div className="exp-title-row">
-            <span className="exp-name" style={{ color: expedition.color }}>{expedition.name}</span>
-            <span className="status-pill" data-status={expedition.status}>{expedition.status}</span>
-          </div>
-          <span className="exp-division">{expedition.divisionName}</span>
-          {expedition.bossBattle && (
-            <span className="exp-boss">⚔ {expedition.bossBattle}</span>
-          )}
-        </div>
-      </div>
-      {expedition.classProgress > 0 && (
-        <>
-          <ProgressBar value={expedition.classProgress} max={100} color={expedition.color} />
-          <div className="exp-progress-label">{expedition.classProgress}% class progress</div>
-        </>
-      )}
-    </div>
-  )
-}
 
-export default function Scoreboard({ guilds, expeditions }: Props) {
+export default function Scoreboard({ guilds }: Props) {
   const sortedGuilds = [...guilds].sort((a, b) => b.seasonTotal - a.seasonTotal)
 
   return (
@@ -99,17 +69,6 @@ export default function Scoreboard({ guilds, expeditions }: Props) {
         ) : (
           sortedGuilds.map((guild, i) => (
             <GuildCard key={guild.name} guild={guild} rank={i + 1} />
-          ))
-        )}
-      </section>
-
-      <section className="sb-section">
-        <h2 className="sb-heading">🗺 EXPEDITIONS</h2>
-        {expeditions.length === 0 ? (
-          <p className="sb-empty">Loading expedition data…</p>
-        ) : (
-          expeditions.map(exp => (
-            <ExpeditionCard key={exp.order} expedition={exp} />
           ))
         )}
       </section>
